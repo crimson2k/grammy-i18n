@@ -1,4 +1,4 @@
-# Source files
+# Source files (не публикуем исходники)
 src/
 examples/
 locales/
@@ -6,6 +6,9 @@ locales/
 # Config files
 tsconfig.json
 tsconfig.build.json
+.editorconfig
+.prettierrc
+.eslintrc*
 
 # Development files
 .git/
@@ -13,8 +16,22 @@ tsconfig.build.json
 *.test.ts
 *.spec.ts
 node_modules/
+coverage/
+.nyc_output/
 
-# Documentation
-CLAUDE.md
+# IDE files
 .vscode/
 .idea/
+*.swp
+*.swo
+*~
+
+# Documentation (не нужная для npm)
+CLAUDE.md
+CONTRIBUTING.md
+
+# Misc
+.DS_Store
+*.log
+.env
+.env.*

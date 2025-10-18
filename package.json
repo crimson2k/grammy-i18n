@@ -29,22 +29,29 @@
   "exports": {
     ".": {
       "import": "./dist/index.js",
+      "require": "./dist/index.js",
       "types": "./dist/index.d.ts"
-    }
+    },
+    "./package.json": "./package.json"
   },
   "bin": {
     "grammy-i18n-generate": "./dist/cli/generate.js"
   },
+  "sideEffects": false,
   "files": [
-    "dist",
+    "dist/**/*",
     "README.md",
     "LICENSE"
   ],
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
-    "prepublishOnly": "bun run build",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "bun run clean && bun run build",
     "i18n:generate": "bun run src/cli/generate.ts",
     "generate-types": "bun run src/cli/generate.ts"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   },
   "dependencies": {
     "yaml": "^2.8.1"
