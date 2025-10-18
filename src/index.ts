@@ -23,6 +23,8 @@ export type {
   I18NConfig,
   I18NFlavor,
   LanguageGetter,
+  TranslationKey,
+  VariablesFor,
   Translations,
   TranslationTree,
   Variables,
