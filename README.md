@@ -113,6 +113,24 @@ npx grammy-i18n-generate
 
 This creates `locales/generated/types.ts` with type definitions for your translation keys.
 
+**Enable types in tsconfig.json:**
+
+Add the generated file to your TypeScript configuration:
+
+```json
+{
+  "compilerOptions": {
+    // ... other options
+  },
+  "include": [
+    "src/**/*",
+    "locales/generated/types.ts"  // Add this line
+  ]
+}
+```
+
+Now you'll get full autocomplete for translation keys and variables!
+
 ## API Reference
 
 ### `I18N` Class
@@ -307,20 +325,43 @@ Then run:
 bun run i18n:generate
 ```
 
-### What you get
+### Enable autocomplete in your project
 
-The generated `locales/generated/types.ts` provides:
-- Autocomplete for all translation keys
-- Type-checking for required variables
-- IntelliSense in your IDE
+After generating types, add the generated file to your `tsconfig.json`:
+
+```json
+{
+  "compilerOptions": {
+    // ... your settings
+  },
+  "include": [
+    "src/**/*",
+    "locales/generated/types.ts"  // Add this line
+  ]
+}
+```
+
+The generated file uses **module augmentation** to override the library's default types, giving you:
+- ✅ Autocomplete for all translation keys
+- ✅ Type-checking for required variables
+- ✅ IntelliSense in your IDE
+- ✅ Works with `ctx.t()` and `hears()` filter
 
 **Example:**
 ```typescript
-// Before: no autocomplete
-ctx.t("user.welcome", { name: "John" });
+// Full autocomplete for keys!
+ctx.t("greeting", { name: "John" });  // ✅ "greeting" is autocompleted
+ctx.t("buttons.start");                // ✅ "buttons.start" is autocompleted
 
-// After: full autocomplete for keys and variables!
-ctx.t("user.welcome", { name: "John" }); // ✅ TypeScript knows 'name' is required
+// TypeScript checks variables
+ctx.t("greeting", { name: "John" });  // ✅ OK
+ctx.t("greeting");                     // ❌ Error: missing 'name' variable
+ctx.t("greeting", { age: 25 });       // ❌ Error: wrong variable
+
+// Also works with hears filter
+bot.filter(hears("buttons.start"), (ctx) => {  // ✅ Autocomplete!
+  ctx.reply("You clicked start");
+});
 ```
 
 ## Examples
