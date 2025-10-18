@@ -15,17 +15,23 @@ Internationalization (i18n) plugin for [Grammy](https://grammy.dev) Telegram bot
 ## Installation
 
 ```bash
-# Using Bun
-bun add grammy-i18n yaml
-
 # Using npm
-npm install grammy-i18n yaml
+npm install grammy-i18n
+
+# Using Bun
+bun add grammy-i18n
 
 # Using pnpm
-pnpm add grammy-i18n yaml
+pnpm add grammy-i18n
 
 # Using yarn
-yarn add grammy-i18n yaml
+yarn add grammy-i18n
+```
+
+**Note:** The `yaml` package is automatically installed as a dependency. You only need to install `grammy` separately if you haven't already:
+
+```bash
+npm install grammy
 ```
 
 ## Quick Start
