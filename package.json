@@ -1,0 +1,60 @@
+{
+  "name": "grammy-i18n",
+  "version": "0.1.0",
+  "description": "Internationalization (i18n) plugin for Grammy Telegram bot framework with type-safe translations",
+  "keywords": [
+    "grammy",
+    "telegram",
+    "bot",
+    "i18n",
+    "internationalization",
+    "localization",
+    "translations",
+    "typescript"
+  ],
+  "author": "crimson2k",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/crimson2k/grammy-i18n.git"
+  },
+  "bugs": {
+    "url": "https://github.com/crimson2k/grammy-i18n/issues"
+  },
+  "homepage": "https://github.com/crimson2k/grammy-i18n#readme",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "bin": {
+    "grammy-i18n-generate": "./dist/cli/generate.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "prepublishOnly": "bun run build",
+    "i18n:generate": "bun run src/cli/generate.ts",
+    "generate-types": "bun run src/cli/generate.ts"
+  },
+  "dependencies": {
+    "yaml": "^2.8.1"
+  },
+  "peerDependencies": {
+    "grammy": "^1.0.0"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "grammy": "^1.0.0",
+    "typescript": "^5"
+  }
+}

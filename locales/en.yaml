@@ -1,0 +1,6 @@
+greeting: "Hello, {{ name }}!"
+welcome: "Welcome to our bot!"
+buttons:
+  start: "Start"
+  help: "Help"
+  settings: "Settings"
