@@ -1,0 +1,20 @@
+# Source files
+src/
+examples/
+locales/
+
+# Config files
+tsconfig.json
+tsconfig.build.json
+
+# Development files
+.git/
+.github/
+*.test.ts
+*.spec.ts
+node_modules/
+
+# Documentation
+CLAUDE.md
+.vscode/
+.idea/

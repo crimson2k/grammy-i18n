@@ -5,62 +5,65 @@
  * and handle button clicks using the hears() filter.
  */
 
-import { Bot, InlineKeyboard } from "grammy";
-import { I18N, I18NMiddleware, hears } from "grammy-i18n";
+import { Bot, type Context, InlineKeyboard } from "grammy";
+import { hears, I18N, type I18NFlavor, I18NMiddleware } from "grammy-i18n";
+
+// Define custom context type with I18N flavor
+type MyContext = Context & I18NFlavor;
 
 // Create I18N instance
 const i18n = new I18N({
-  localesDir: "./locales",
-  defaultLocale: "en",
+	localesDir: "./locales",
+	defaultLocale: "en",
 });
 
 await i18n.load();
 
-// Create bot
-const bot = new Bot(process.env.BOT_TOKEN ?? "");
+// Create bot with custom context type
+const bot = new Bot<MyContext>(process.env.BOT_TOKEN ?? "");
 
 // Add I18N middleware
 bot.use(
-  I18NMiddleware(i18n, (ctx) => {
-    return ctx.from?.language_code ?? "en";
-  })
+	I18NMiddleware(i18n, (ctx) => {
+		return ctx.from?.language_code ?? "en";
+	}),
 );
 
 // Start command with multilingual keyboard
 bot.command("start", (ctx) => {
-  // Create keyboard with translated button labels
-  const keyboard = new InlineKeyboard()
-    .text(ctx.t("buttons.catalog"), "catalog")
-    .text(ctx.t("buttons.cart"), "cart")
-    .row()
-    .text(ctx.t("buttons.settings"), "settings")
-    .text(ctx.t("buttons.help"), "help");
+	// Create keyboard with translated button labels
+	const keyboard = new InlineKeyboard()
+		.text(ctx.t("buttons.catalog"), "catalog")
+		.text(ctx.t("buttons.cart"), "cart")
+		.row()
+		.text(ctx.t("buttons.settings"), "settings")
+		.text(ctx.t("buttons.help"), "help");
 
-  ctx.reply(ctx.t("welcome"), {
-    reply_markup: keyboard,
-  });
+	ctx.reply(ctx.t("welcome"), {
+		reply_markup: keyboard,
+	});
 });
 
 // Handle button callbacks
 bot.callbackQuery("catalog", (ctx) => {
-  ctx.answerCallbackQuery();
-  ctx.reply(ctx.t("messages.catalog_opened"));
+	ctx.answerCallbackQuery();
+	ctx.reply(ctx.t("messages.catalog_opened"));
 });
 
 bot.callbackQuery("cart", (ctx) => {
-  ctx.answerCallbackQuery();
-  const itemCount = 3; // Example
-  ctx.reply(ctx.t("messages.cart_items", { count: itemCount }));
+	ctx.answerCallbackQuery();
+	const itemCount = 3; // Example
+	ctx.reply(ctx.t("messages.cart_items", { count: itemCount }));
 });
 
 bot.callbackQuery("settings", (ctx) => {
-  ctx.answerCallbackQuery();
-  ctx.reply(ctx.t("messages.settings_opened"));
+	ctx.answerCallbackQuery();
+	ctx.reply(ctx.t("messages.settings_opened"));
 });
 
 bot.callbackQuery("help", (ctx) => {
-  ctx.answerCallbackQuery();
-  ctx.reply(ctx.t("messages.help_text"));
+	ctx.answerCallbackQuery();
+	ctx.reply(ctx.t("messages.help_text"));
 });
 
 // Alternative: Using hears() filter for text-based buttons
@@ -68,21 +71,21 @@ bot.callbackQuery("help", (ctx) => {
 
 // Create a keyboard with text buttons
 bot.command("menu", (ctx) => {
-  const message = ctx.t("messages.choose_option");
+	const message = ctx.t("messages.choose_option");
 
-  // Note: In real app, you would use Keyboard builder
-  // This is just to demonstrate the concept
-  ctx.reply(message);
+	// Note: In real app, you would use Keyboard builder
+	// This is just to demonstrate the concept
+	ctx.reply(message);
 });
 
 // The hears() filter matches messages in ANY language
 // If user clicks "Catalog" (en) or "Каталог" (ru), this handler will trigger
 bot.filter(hears("buttons.catalog"), (ctx) => {
-  ctx.reply(ctx.t("messages.catalog_opened"));
+	ctx.reply(ctx.t("messages.catalog_opened"));
 });
 
 bot.filter(hears("buttons.settings"), (ctx) => {
-  ctx.reply(ctx.t("messages.settings_opened"));
+	ctx.reply(ctx.t("messages.settings_opened"));
 });
 
 // Start the bot
