@@ -199,55 +199,31 @@ function generateTypes(translations: Translations): string {
 
   const keys = extractKeys(translations[firstLocale] as TranslationTree);
 
-  // Generate union type for all keys
-  const keyUnion = Array.from(keys.keys())
-    .map((key) => `  | "${key}"`)
-    .join("\n");
-
-  // Generate variables mapping
-  const variablesMapping: string[] = [];
+  const interfaceMapping: string[] = [];
   for (const [key, template] of keys) {
     const variables = extractVariables(template);
     if (variables.length > 0) {
       const varsType = variables
         .map((v) => `${v}: string | number | boolean`)
         .join("; ");
-      variablesMapping.push(`  "${key}": { ${varsType} };`);
+      interfaceMapping.push(`    "${key}": { ${varsType} };`);
+    } else {
+      interfaceMapping.push(`    "${key}": undefined;`);
     }
   }
-
-  const variablesType =
-    variablesMapping.length > 0
-      ? `{\n${variablesMapping.join("\n")}\n}`
-      : "Record<string, never>";
 
   return `/**
  * Auto-generated translation types.
  * DO NOT EDIT MANUALLY - run 'bun run i18n:generate' to regenerate.
  */
 
-/**
- * All available translation keys
- */
-export type TranslationKey =
-${keyUnion};
-
-/**
- * Variables required for each translation key
- */
-export type TranslationVariables = ${variablesType};
-
-/**
- * Helper type to get variables for a specific key
- */
-export type VariablesFor<K extends TranslationKey> = K extends keyof TranslationVariables
-  ? TranslationVariables[K]
-  : undefined;
-
-// Module augmentation to override library types
-declare module "grammy-i18n" {
-  export type { TranslationKey, VariablesFor };
+declare global {
+  interface GrammyI18NTranslations {
+${interfaceMapping.join("\n")}
+  }
 }
+
+export {};
 `;
 }
 

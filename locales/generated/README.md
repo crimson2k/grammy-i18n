@@ -45,15 +45,19 @@ ctx.t("greeting");                     // ❌ Error: missing 'name'
 
 ## How it works
 
-The generated file uses **module augmentation** to override the library's default types:
+The generated file extends a global interface that the library uses:
 
 ```typescript
-declare module "grammy-i18n" {
-  export type { TranslationKey, VariablesFor };
+declare global {
+  interface GrammyI18NTranslations {
+    "greeting": { name: string | number | boolean };
+    "welcome": undefined;
+    // ... all your keys
+  }
 }
 ```
 
-This means TypeScript will use your generated types instead of the library's generic `string` type.
+The library reads from this global interface to provide typed autocomplete. TypeScript automatically merges your interface with the library's types through **interface merging**.
 
 ## When to regenerate
 

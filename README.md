@@ -113,23 +113,20 @@ npx grammy-i18n-generate
 
 This creates `locales/generated/types.ts` with type definitions for your translation keys.
 
-**Enable types in tsconfig.json:**
+**Enable autocomplete:**
 
-Add the generated file to your TypeScript configuration:
+Make sure the generated file is included in your TypeScript project. Add to `tsconfig.json`:
 
 ```json
 {
-  "compilerOptions": {
-    // ... other options
-  },
   "include": [
     "src/**/*",
-    "locales/generated/types.ts"  // Add this line
+    "locales/generated/types.ts"
   ]
 }
 ```
 
-Now you'll get full autocomplete for translation keys and variables!
+The generated file extends a global interface, so TypeScript will automatically pick up your translation types and provide full autocomplete!
 
 ## API Reference
 
@@ -327,42 +324,43 @@ bun run i18n:generate
 
 ### Enable autocomplete in your project
 
-After generating types, add the generated file to your `tsconfig.json`:
+**Important:** Make sure the generated file is included in your TypeScript compilation:
 
 ```json
 {
-  "compilerOptions": {
-    // ... your settings
-  },
   "include": [
     "src/**/*",
-    "locales/generated/types.ts"  // Add this line
+    "locales/generated/types.ts"
   ]
 }
 ```
 
-The generated file uses **module augmentation** to override the library's default types, giving you:
-- ✅ Autocomplete for all translation keys
-- ✅ Type-checking for required variables
-- ✅ IntelliSense in your IDE
-- ✅ Works with `ctx.t()` and `hears()` filter
+The generated file extends a global `GrammyI18NTranslations` interface, which is automatically detected by TypeScript. This gives you:
+
+- ✅ **Autocomplete** for all translation keys
+- ✅ **Type-checking** for required variables
+- ✅ **IntelliSense** in your IDE
+- ✅ Works with `ctx.t()`, `hears()`, and `hearsAny()`
 
 **Example:**
+
 ```typescript
-// Full autocomplete for keys!
-ctx.t("greeting", { name: "John" });  // ✅ "greeting" is autocompleted
-ctx.t("buttons.start");                // ✅ "buttons.start" is autocompleted
+// ✅ Full autocomplete for translation keys
+ctx.t("greeting", { name: "John" });
+ctx.t("buttons.start");
 
-// TypeScript checks variables
-ctx.t("greeting", { name: "John" });  // ✅ OK
-ctx.t("greeting");                     // ❌ Error: missing 'name' variable
-ctx.t("greeting", { age: 25 });       // ❌ Error: wrong variable
+// ✅ TypeScript validates required variables
+ctx.t("greeting", { name: "John" });  // ✅ Correct
+ctx.t("greeting");                     // ❌ Error: missing required 'name'
+ctx.t("greeting", { age: 25 });       // ❌ Error: unexpected property 'age'
 
-// Also works with hears filter
-bot.filter(hears("buttons.start"), (ctx) => {  // ✅ Autocomplete!
+// ✅ Autocomplete in hears() filter
+bot.filter(hears("buttons.start"), (ctx) => {
   ctx.reply("You clicked start");
 });
 ```
+
+**How it works:** The generated file declares a global interface that the library reads. When you include it in your project, TypeScript automatically merges the types.
 
 ## Examples
 
