@@ -4,13 +4,13 @@ Internationalization (i18n) plugin for [Grammy](https://grammy.dev) Telegram bot
 
 ## Features
 
-- **Type-safe translations** - Auto-generated TypeScript types for translation keys and variables
 - **YAML-based** - Easy-to-edit translation files with nested structure support
 - **Variable interpolation** - Use `{{ variable }}` syntax in translations
 - **Multiple locales** - Support for any number of languages
 - **Flexible structure** - Flat or nested translation file organization
 - **Grammy middleware** - Seamless integration with Grammy bot framework
 - **Locale-aware filters** - `hears()` and `hearsAny()` for multilingual button/command handling
+- **TypeScript support** - Full type definitions included
 
 ## Installation
 
@@ -26,12 +26,6 @@ pnpm add grammy-i18n
 
 # Using yarn
 yarn add grammy-i18n
-```
-
-**Note:** The `yaml` package is automatically installed as a dependency. You only need to install `grammy` separately if you haven't already:
-
-```bash
-npm install grammy
 ```
 
 ## Quick Start
@@ -91,42 +85,7 @@ bot.command("start", (ctx) => {
 bot.start();
 ```
 
-### 3. Generate types (optional, but recommended)
-
-For autocomplete and type safety, generate TypeScript types from your translation files:
-
-```bash
-# Using the CLI command (recommended)
-bunx grammy-i18n-generate
-
-# Or with npm
-npx grammy-i18n-generate
-
-# Or add to your package.json scripts
-{
-  "scripts": {
-    "i18n:generate": "grammy-i18n-generate"
-  }
-}
-# Then run: bun run i18n:generate
-```
-
-This creates `locales/generated/types.ts` with type definitions for your translation keys.
-
-**Enable autocomplete:**
-
-Make sure the generated file is included in your TypeScript project. Add to `tsconfig.json`:
-
-```json
-{
-  "include": [
-    "src/**/*",
-    "locales/generated/types.ts"
-  ]
-}
-```
-
-The generated file extends a global interface, so TypeScript will automatically pick up your translation types and provide full autocomplete!
+That's it! Your bot now supports multiple languages.
 
 ## API Reference
 
@@ -287,81 +246,6 @@ ctx.t("profile", { firstName: "John", lastName: "Doe", age: 30 });
 // "John Doe, 30 years old"
 ```
 
-## Type Generation
-
-To get autocomplete for translation keys and variables, run the type generator after creating or modifying your translation files:
-
-### Using the CLI command
-
-```bash
-# Generate types with default paths
-bunx grammy-i18n-generate
-
-# Or specify custom paths
-bunx grammy-i18n-generate --locales-dir ./translations --output ./types/i18n.ts
-
-# See all options
-bunx grammy-i18n-generate --help
-```
-
-### Using package.json script
-
-Add a script to your `package.json`:
-
-```json
-{
-  "scripts": {
-    "i18n:generate": "grammy-i18n-generate"
-  }
-}
-```
-
-Then run:
-
-```bash
-bun run i18n:generate
-```
-
-### Enable autocomplete in your project
-
-**Important:** Make sure the generated file is included in your TypeScript compilation:
-
-```json
-{
-  "include": [
-    "src/**/*",
-    "locales/generated/types.ts"
-  ]
-}
-```
-
-The generated file extends a global `GrammyI18NTranslations` interface, which is automatically detected by TypeScript. This gives you:
-
-- ✅ **Autocomplete** for all translation keys
-- ✅ **Type-checking** for required variables
-- ✅ **IntelliSense** in your IDE
-- ✅ Works with `ctx.t()`, `hears()`, and `hearsAny()`
-
-**Example:**
-
-```typescript
-// ✅ Full autocomplete for translation keys
-ctx.t("greeting", { name: "John" });
-ctx.t("buttons.start");
-
-// ✅ TypeScript validates required variables
-ctx.t("greeting", { name: "John" });  // ✅ Correct
-ctx.t("greeting");                     // ❌ Error: missing required 'name'
-ctx.t("greeting", { age: 25 });       // ❌ Error: unexpected property 'age'
-
-// ✅ Autocomplete in hears() filter
-bot.filter(hears("buttons.start"), (ctx) => {
-  ctx.reply("You clicked start");
-});
-```
-
-**How it works:** The generated file declares a global interface that the library reads. When you include it in your project, TypeScript automatically merges the types.
-
 ## Examples
 
 See the [examples](./examples) directory for complete working examples:
@@ -436,7 +320,6 @@ const bot = new Bot<MyContext>("TOKEN");
 
 - [Grammy](https://grammy.dev) ^1.0.0
 - [yaml](https://github.com/eemeli/yaml) ^2.4.0
-- TypeScript ^5.0.0 (for type generation)
 
 ## Runtime Support
 

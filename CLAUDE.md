@@ -23,23 +23,6 @@ bun run index.ts
 bun install
 ```
 
-**Generate TypeScript types from YAML translations:**
-```bash
-# During development (runs directly from source)
-bun run i18n:generate
-
-# For users of the library (after installation)
-bunx grammy-i18n-generate
-
-# Or use the full path
-bun run src/scripts/generate-types.ts
-```
-
-This script scans `./locales/` for YAML files and generates `./locales/generated/types.ts` with:
-- `TranslationKey` union type (all translation keys from YAML files)
-- `VariablesFor<K>` mapped type (required variables for each key)
-
-The library provides a `bin` command `grammy-i18n-generate` that users can run after installing the package.
 
 **No tests are currently configured** (no test files found in codebase).
 
@@ -113,24 +96,6 @@ user:
     title: "User Profile"
 ```
 
-**Important:** After modifying YAML files, run `bun run i18n:generate` to update TypeScript types.
-
-### Type System & Module Augmentation
-
-The library uses **module augmentation** to provide type-safe translations:
-
-1. Users run `grammy-i18n-generate` to generate types from their YAML files
-2. Generated file (`locales/generated/types.ts`) contains:
-   - Typed translation keys (union of all available keys)
-   - Variables mapping (which variables each key requires)
-   - Module augmentation that overrides library's default `TranslationKey` and `VariablesFor` types
-3. TypeScript automatically picks up these augmented types when the file is included in `tsconfig.json`
-
-This provides:
-- Autocomplete for `ctx.t("key", { variables })`
-- Autocomplete for `hears("key")` filter
-- Type checking for required variables
-- IntelliSense in IDE
 
 ## Usage Pattern
 

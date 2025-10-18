@@ -1,24 +1,9 @@
 import type { Context } from "grammy";
 import type { I18N } from "../i18n";
 
-// Global interface for type augmentation
-// Users generate types that extend this interface
-declare global {
-	interface GrammyI18NTranslations {
-		// Empty by default - will be extended by generated types
-	}
-}
-
-// Extract translation keys from global interface
-export type TranslationKey = keyof GrammyI18NTranslations extends never
-	? string
-	: keyof GrammyI18NTranslations;
-
-// Extract variables for each key
-export type VariablesFor<K extends TranslationKey> =
-	K extends keyof GrammyI18NTranslations
-		? GrammyI18NTranslations[K]
-		: Record<string, string | number | boolean> | undefined;
+// Simple string types - no autocomplete
+export type TranslationKey = string;
+export type VariablesFor<K extends TranslationKey> = Record<string, string | number | boolean> | undefined;
 
 /**
  * Represents a nested translation object structure.

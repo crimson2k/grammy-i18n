@@ -1,6 +1,0 @@
-greeting: "Привет, {{ name }}!"
-welcome: "Добро пожаловать в наш бот!"
-buttons:
-  start: "Начать"
-  help: "Помощь"
-  settings: "Настройки"

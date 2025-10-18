@@ -34,9 +34,6 @@
     },
     "./package.json": "./package.json"
   },
-  "bin": {
-    "grammy-i18n-generate": "./dist/cli/generate.js"
-  },
   "sideEffects": false,
   "files": [
     "dist/**/*",
@@ -46,9 +43,7 @@
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "clean": "rm -rf dist",
-    "prepublishOnly": "bun run clean && bun run build",
-    "i18n:generate": "bun run src/cli/generate.ts",
-    "generate-types": "bun run src/cli/generate.ts"
+    "prepublishOnly": "bun run clean && bun run build"
   },
   "engines": {
     "node": ">=18.0.0"
